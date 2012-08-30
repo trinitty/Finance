@@ -7,8 +7,6 @@ using std::string;
 
 DownloadHandler* DownloadHandler::mInstance = NULL;
 
-// PRIVATE FUNCTIONS
-
 int DownloadHandler::writer(char *mData, size_t mSize, size_t nmemb, void *ptr) {
 	int res = 0;
 	string *mBuffer = (string *) ptr;

@@ -12,19 +12,21 @@ DownloadHandler* Quote::mDH = DownloadHandler::getDownloadHandler();
 // Should not be used
 Quote::Quote() {}
 
-Quote::Quote(string mSymbol, string mName, string mDate, string mTime, double mPrice, double mChange) {
+Quote::Quote(string mSymbol, string mName, string mDate, string mTime, double mPrice, double mChange, int n = 1) {
 	symbol	= mSymbol;
 	name	= mName;
 	date	= mDate;
 	time	= mTime;
 	price	= mPrice;
 	change	= mChange;
+	number	= n;
 
 	init = true;
 }
 
-Quote::Quote(string s) {
+Quote::Quote(string s, int n = 1) {
 	decode(s);
+	number = n;
 }
 
 // Decodes Quote data from a CSV string
@@ -79,11 +81,11 @@ string Quote::encode() {
 	return out;
 }
 
-Quote Quote::get(char *symbol) {
+Quote Quote::get(char *symbol, int n = 1) {
 	string res = mDH->download(symbol);
 
 	if(mDH->success()) {
-		Quote q(res);
+		Quote q(res, n);
 		return q;
 	}
 
@@ -93,7 +95,7 @@ Quote Quote::get(char *symbol) {
 }
 
 bool Quote::update() {
-	string res = Quote::mDH->download(symbol.c_str());
+	string res = mDH->download(symbol.c_str());
 
 	if(mDH->success()) {
 		decode(res);
@@ -113,11 +115,18 @@ string Quote::toString() {
 }
 
 // Getters
-bool Quote::isInit()		{ return init; }
-string Quote::getSymbol()	{ return symbol; }
-string Quote::getName()		{ return name; }
+bool   Quote::isInit()		{ return init;				}
+string Quote::getSymbol()	{ return symbol;			}
+string Quote::getName()		{ return name;				}
 string Quote::getDateTime() { return date + " " + time; }
-string Quote::getDate()		{ return date; }
-string Quote::getTime()		{ return time; }
-double Quote::getChange()	{ return change; }
-double Quote::getPrice()	{ return price; }
+string Quote::getDate()		{ return date;				}
+string Quote::getTime()		{ return time;				}
+double Quote::getChange()	{ return change;			}
+double Quote::getPrice()	{ return price;				}
+int    Quote::getNum()      { return number;			}
+
+int Quote::setNum(int n) {
+	int tmp = number;
+	number = n;
+	return tmp;
+}

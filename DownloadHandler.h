@@ -7,44 +7,44 @@
 using std::string;
 
 /*
- * A basic wrapper for cURL library
- * Singleton class
+ * A simple wrapper for libcurl
+ * returns the data downloaded as a std::string
+
+ * Note : This is a singleton class. It cannot be instantiated. Call the factory method
+ *        getDownloadHandler() to get an instance of the downloadManager.
  */
 class DownloadHandler {
 private:
-	static DownloadHandler *mInstance;
+	static DownloadHandler *mInstance;		// The unique instance
 
-	// Constructor, takes in the base URL
-	DownloadHandler(string);
+	DownloadHandler(string);				// Constructor, @param = base URL
 
-	// Base Download URL, passed in the Constructor
-	string baseURL;
-	string oBuffer; 
+	string baseURL;							// Base Download URL, passed in the Constructor
+	string oBuffer;							// Buffer used to write the downloaded data to
 	
-	// cURL Stuff
-	char errorBuffer[CURL_ERROR_SIZE];
+	char errorBuffer[CURL_ERROR_SIZE];		// Curl Error Buffer
+	CURL *curl;								// Working instance of CURL
+	CURLcode result;						// Return result code of last executed curl request
 	
-	CURL *curl;
-	CURLcode result;
-	
-	void initCURL();
+	void initCURL();						// Initiates all the curl settings
 		
 	// CURLOPT_WRITEFUNCTION
+	// Note : Static for compatibility, since curl was designed for C. not C++
 	static int writer(char *, size_t, size_t, void *);
 	
 public:
 	static DownloadHandler* getDownloadHandler();
 
-	~DownloadHandler();
-	
-	bool success();
-	string getError();
+	bool success();							// Was the last executed curl request a success
+	string getError();						// If applicable, the error desc of the last executed request
 
 	/*
 	 * The main Download Method, Takes in the URL and returns
 	 * the downloaded data as a string. 
 	 */
 	string download(const char *);
+
+	~DownloadHandler();						// Cleans up curl
 };
 
 #endif
