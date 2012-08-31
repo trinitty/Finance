@@ -46,6 +46,7 @@ public:
 
 	bool isInit();								// Is the Quote object's data members populated properly
 	errorCode getError();						// Returns the enum constant of the error
+	string errorToString();				// Returns the latest error as a string
 
 	// Getters
 	string getSymbol();

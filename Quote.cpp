@@ -22,6 +22,7 @@ Quote::Quote(string mSymbol, string mName, string mDate, string mTime, double mP
 	number	= n;
 
 	init = true;
+
 }
 
 Quote::Quote(string s, int n) {
@@ -112,6 +113,19 @@ bool Quote::update() {
 
 string Quote::toString() {
 	return encode();
+}
+
+string Quote::errorToString() {
+	switch(error) {
+	case INVALID_SYMBOL:
+		return "Incorrect stock symbol";
+
+	case CONNECTIVITY_ERROR:
+		return "Internet connectivity error";
+
+	default:
+		return "No error occured";
+	}
 }
 
 bool   Quote::isInit()				{ return init;				}

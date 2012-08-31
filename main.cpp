@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main() {
+int Amain() {
 	
 	Quote q = Quote::get("AAPL");
 
