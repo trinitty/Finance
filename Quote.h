@@ -11,6 +11,13 @@ using std::string;
  * The Quote Object. holds the data for a stock
  */
 class Quote {
+public:
+	// Error Codes
+	enum errorCode {
+		INVALID_SYMBOL,
+		CONNECTIVITY_ERROR
+	};
+
 private:
 	Quote();									// Cannot be instantiated without parameters
 
@@ -19,14 +26,16 @@ private:
 	double change, price;
 	int number;
 
-	bool init;
-	
+	bool init;					
+	errorCode error;
+
 	static DownloadHandler *mDH;				// The instance of the singleton Downloadhandler
 
 	void decode(string);						// Populates the data variables with the given csv string
 	string encode();							// Converts the current data variables to a csv string
 
 public:
+
 	Quote(string, int n = 1);												// Build From csv string, second param = num
 	Quote(string, string, string, string, double, double, int n = 1);		// Build from values
 
@@ -36,6 +45,7 @@ public:
 	string toString();							// returns a csv string representation of the object
 
 	bool isInit();								// Is the Quote object's data members populated properly
+	errorCode getError();						// Returns the enum constant of the error
 
 	// Getters
 	string getSymbol();

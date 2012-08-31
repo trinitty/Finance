@@ -9,3 +9,9 @@
 
 *.dev
 *.win
+
+# Visual Studio files #
+*.vcxproj
+*.filters
+*.user
+Debug/

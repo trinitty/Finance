@@ -52,7 +52,7 @@ DownloadHandler * DownloadHandler::getDownloadHandler() {
 
 string DownloadHandler::download(const char *param) {
 	char URL[150];
-	sprintf(URL, baseURL.c_str(), param);
+	sprintf_s(URL, baseURL.c_str(), param);
 	curl_easy_setopt(curl, CURLOPT_URL, URL);
 
 	result = curl_easy_perform(curl);

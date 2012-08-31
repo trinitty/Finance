@@ -9,9 +9,9 @@ using namespace std;
 int main() {
 	
 	Quote q = Quote::get("AAPL");
-	
+
 	if(!q.isInit())
-		cout << "Incorrect stock symbol!";
+		cout << q.getError();
 	else
 		cout << q.getName() << endl << q.getPrice();
 
