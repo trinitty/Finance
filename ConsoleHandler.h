@@ -14,7 +14,7 @@ public:
 		BUY,
 		SELL,
 		PORTFOLIO,
-		HISTORY,
+		STATUS,                              //changed from history to status
 		EXIT
 	};
  //git test
@@ -48,3 +48,23 @@ public:
  * User class's functions like buy or sell will not verify the input for number of stocks. So pass in verfied input only.
 
  */
+
+buyMenu() {
+          char choice[];
+          Quote q = Quote::get(choice);
+          cout << q.getName()
+          
+          
+          }
+          
+          
+          
+sellMenu()
+
+Qoute q = user->getQuote("AAPL");
+
+ConsoleHandler() {
+                 
+ user = User::getInstance();
+                  
+}
