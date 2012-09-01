@@ -17,7 +17,7 @@ public:
 		HISTORY,
 		EXIT
 	};
-
+ //git test
 private:
 	bool connected;					// Keeps track of wheather we have an active internet connection
 
@@ -35,7 +35,6 @@ public:
 	// showHistory(); TODO
 
 	void setConnectivity(bool);		// Sets the internet connectivity state
-
 };
 
 /* Notes
