@@ -12,7 +12,7 @@ DownloadHandler* Quote::mDH = DownloadHandler::getDownloadHandler();
 // should not be used !! testing
 Quote::Quote() {}
 
-Quote::Quote(string mSymbol, string mName, string mDate, string mTime, double mPrice, double mChange, int n = 1) {
+Quote::Quote(string mSymbol, string mName, string mDate, string mTime, double mPrice, double mChange, int n) {
 	symbol	= mSymbol;
 	name	= mName;
 	date	= mDate;
@@ -22,9 +22,10 @@ Quote::Quote(string mSymbol, string mName, string mDate, string mTime, double mP
 	number	= n;
 
 	init = true;
+
 }
 
-Quote::Quote(string s, int n = 1) {
+Quote::Quote(string s, int n) {
 	decode(s);
 	number = n;
 }
@@ -63,9 +64,11 @@ void Quote::decode(string s) {
 	change =  atof(s.substr(0, x).c_str());
 	s.erase(0, x+1);
 
-	if(price == 0)
+	if(price == 0) {
 		init = false;
-	else
+		error = INVALID_SYMBOL;
+
+	} else
 		init = true;
 }
 
@@ -81,7 +84,7 @@ string Quote::encode() {
 	return out;
 }
 
-Quote Quote::get(char *symbol, int n = 1) {
+Quote Quote::get(char *symbol, int n) {
 	string res = mDH->download(symbol);
 
 	if(mDH->success()) {
@@ -91,6 +94,7 @@ Quote Quote::get(char *symbol, int n = 1) {
 
 	// In case of download Failure return empty object
 	Quote q;
+	q.error = CONNECTIVITY_ERROR;
 	return q;
 }
 
@@ -108,14 +112,26 @@ bool Quote::update() {
 
 
 string Quote::toString() {
-	if(!isInit())
-		return "Not Initiated";
-	else
-		return encode();
+	return encode();
 }
 
+string Quote::errorToString() {
+	switch(error) {
+	case INVALID_SYMBOL:
+		return "Incorrect stock symbol";
+
+	case CONNECTIVITY_ERROR:
+		return "Internet connectivity error";
+
+	default:
+		return "No error occured";
+	}
+}
+
+bool   Quote::isInit()				{ return init;				}
+Quote::errorCode Quote::getError()	{ return error;				}
+
 // Getters
-bool   Quote::isInit()		{ return init;				}
 string Quote::getSymbol()	{ return symbol;			}
 string Quote::getName()		{ return name;				}
 string Quote::getDateTime() { return date + " " + time; }
