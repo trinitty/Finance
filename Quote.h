@@ -22,8 +22,16 @@ private:
 	Quote();									// Cannot be instantiated without parameters
 
 	// Private data variables
-	string symbol, name, date, time;
-	double change, price;
+	string symbol, name;
+
+	// Original Data
+	string odate, otime;
+	double ochange, oprice;
+
+	// New Data
+	string ndate, ntime;
+	double nchange, nprice;
+
 	int number;
 
 	bool init;					
@@ -33,6 +41,7 @@ private:
 
 	void decode(string);						// Populates the data variables with the given csv string
 	string encode();							// Converts the current data variables to a csv string
+	void update(string);						// Updates ndata using the downloaded csv string
 
 public:
 
@@ -41,21 +50,30 @@ public:
 
 	static Quote get(char *, int n = 1);		// Quote Factory. Creates a Quote object from the given symbol
 
-	bool update();								// Refreshes the stock data
+	void updateOriginals();						// Copies all the values in n data to o data. Refresh should have been called before
+	bool refresh();								// Downloads updated data, original data kept intact
 	string toString();							// returns a csv string representation of the object
 
 	bool isInit();								// Is the Quote object's data members populated properly
 	errorCode getError();						// Returns the enum constant of the error
-	string errorToString();				// Returns the latest error as a string
+	string errorToString();						// Returns the latest error as a string
 
 	// Getters
 	string getSymbol();
 	string getName();
-	string getDateTime();
-	string getDate();
-	string getTime();
-	double getChange();
-	double getPrice();
+
+	string getoDateTime();
+	string getoDate();
+	string getoTime();
+	double getoChange();
+	double getoPrice();
+
+	string getnDateTime();						// Never call any get n function without refreshing it first. 
+	string getnDate();
+	string getnTime();
+	double getnChange();
+	double getnPrice();
+
 	int getNum();
 
 	int setNum(int);							// Returns the previous number value

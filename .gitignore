@@ -16,6 +16,7 @@
 *.user
 *.sdf
 *.opensdf
+*.suo
 
 ipch/
 Debug/

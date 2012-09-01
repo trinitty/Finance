@@ -15,10 +15,10 @@ Quote::Quote() {}
 Quote::Quote(string mSymbol, string mName, string mDate, string mTime, double mPrice, double mChange, int n) {
 	symbol	= mSymbol;
 	name	= mName;
-	date	= mDate;
-	time	= mTime;
-	price	= mPrice;
-	change	= mChange;
+	odate	= mDate;
+	otime	= mTime;
+	oprice	= mPrice;
+	ochange	= mChange;
 	number	= n;
 
 	init = true;
@@ -46,25 +46,25 @@ void Quote::decode(string s) {
 
 	// Price
 	x = s.find(',');
-	price =  atof(s.substr(0, x).c_str());
+	oprice =  atof(s.substr(0, x).c_str());
 	s.erase(0, x+1);
 
 	// Date
 	x = s.find(',');
-	date =  s.substr(1, x-2);
+	odate =  s.substr(1, x-2);
 	s.erase(0, x+1);
 
 	// Time
 	x = s.find(',');
-	time =  s.substr(1, x-2);
+	otime =  s.substr(1, x-2);
 	s.erase(0, x+1);
 
 	// Change
 	x = s.find(',');
-	change =  atof(s.substr(0, x).c_str());
+	ochange =  atof(s.substr(0, x).c_str());
 	s.erase(0, x+1);
 
-	if(price == 0) {
+	if(oprice == 0) {
 		init = false;
 		error = INVALID_SYMBOL;
 
@@ -78,7 +78,7 @@ string Quote::encode() {
 		return "\"ERROR\",\"N/A\",0.00,\"N/A\",\"N/A\",N/A";
 
 	char buffer[250];
-	sprintf(buffer, "\"%s\",\"%s\",%g,\"%s\",\"%s\",%g", symbol.c_str(), name.c_str(), price, date.c_str(), time.c_str(), change);
+	sprintf(buffer, "\"%s\",\"%s\",%g,\"%s\",\"%s\",%g", symbol.c_str(), name.c_str(), oprice, odate.c_str(), otime.c_str(), ochange);
 
 	string out(buffer);
 	return out;
@@ -98,11 +98,18 @@ Quote Quote::get(char *symbol, int n) {
 	return q;
 }
 
-bool Quote::update() {
+void Quote::updateOriginals() {
+	odate	= ndate;
+	otime	= ntime;
+	oprice	= nprice;
+	ochange	= nchange;
+}
+
+bool Quote::refresh() {
 	string res = mDH->download(symbol.c_str());
 
 	if(mDH->success()) {
-		decode(res);
+		update(res);
 		return true;
 	}
 
@@ -110,6 +117,38 @@ bool Quote::update() {
 	return false;
 }
 
+// Updates the ndata using the csv string. Does not touch the original data
+void Quote::update(string s) {
+	int x;
+
+	// Symbol
+	x = s.find(',');
+	s.erase(0, x+1);
+
+	// Name
+	x = s.find(',');
+	s.erase(0, x+1);
+
+	// Price
+	x = s.find(',');
+	nprice =  atof(s.substr(0, x).c_str());
+	s.erase(0, x+1);
+
+	// Date
+	x = s.find(',');
+	ndate =  s.substr(1, x-2);
+	s.erase(0, x+1);
+
+	// Time
+	x = s.find(',');
+	ntime =  s.substr(1, x-2);
+	s.erase(0, x+1);
+
+	// Change
+	x = s.find(',');
+	nchange =  atof(s.substr(0, x).c_str());
+	s.erase(0, x+1);
+}
 
 string Quote::toString() {
 	return encode();
@@ -128,18 +167,26 @@ string Quote::errorToString() {
 	}
 }
 
-bool   Quote::isInit()				{ return init;				}
-Quote::errorCode Quote::getError()	{ return error;				}
+bool   Quote::isInit()				{ return init;}
+Quote::errorCode Quote::getError()	{ return error;	}
 
 // Getters
-string Quote::getSymbol()	{ return symbol;			}
-string Quote::getName()		{ return name;				}
-string Quote::getDateTime() { return date + " " + time; }
-string Quote::getDate()		{ return date;				}
-string Quote::getTime()		{ return time;				}
-double Quote::getChange()	{ return change;			}
-double Quote::getPrice()	{ return price;				}
-int    Quote::getNum()      { return number;			}
+string Quote::getSymbol()	{ return symbol; }
+string Quote::getName()		{ return name; }
+
+string Quote::getoDateTime() { return odate + " " + otime; }
+string Quote::getoDate()		{ return odate;	}
+string Quote::getoTime()		{ return otime;	}
+double Quote::getoChange()	{ return ochange; }
+double Quote::getoPrice()	{ return oprice; }
+
+string Quote::getnDateTime() { return ndate + " " + ntime; }
+string Quote::getnDate()		{ return ndate;	}
+string Quote::getnTime()		{ return ntime;	}
+double Quote::getnChange()	{ return nchange; }
+double Quote::getnPrice()	{ return nprice; }
+
+int    Quote::getNum()      { return number; }
 
 int Quote::setNum(int n) {
 	int tmp = number;
