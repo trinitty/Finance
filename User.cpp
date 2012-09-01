@@ -13,8 +13,8 @@ User * User::getInstance() {
 
 // DEBUG CODE
 User::User() {
-	cashInHand = 10000;
-	stockWorth = 0;
+	cashInHand = 10000.0f;
+	stockWorth = 0.0f;
 }
 
 void User::buy(Quote q, int n) {
@@ -37,13 +37,12 @@ float User::sell(string s, int n) {
 	q->refresh();
 
 	// Price to be sold at
-	int price = q->getnPrice();
+	double price = q->getnPrice();
 	int number = q->getNum();
 
 	// Selling all the stocks
 	if(number <= n) {
 		portfolio.erase(portfolio.begin() + pos);
-
 	} else {
 		q->setNum(number - n);
 	}
