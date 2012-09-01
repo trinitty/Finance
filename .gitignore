@@ -9,3 +9,16 @@
 
 *.dev
 *.win
+
+# Visual Studio files #
+*.vcxproj
+*.filters
+*.user
+*.sdf
+*.opensdf
+
+ipch/
+Debug/
+
+# Main file used to test #
+testMain.cpp

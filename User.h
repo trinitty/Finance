@@ -13,6 +13,10 @@ using std::vector;
  * Keeps track of all the details of the current User
  */
 class User {
+	// Singleton methods
+	static User *mInstance;				// The instance of the user object to be used
+	User() {};							// Private constructor, singleton class
+
 	vector<Quote> portfolio;			// Keeps Track of all the Quotes the user owns
 	double cInHand;						// Cash the user has in hand
 
@@ -23,6 +27,8 @@ class User {
 
 public:
 	
+	static User * getInstance();
+
 	// Buys n of the given Quote; Will return false if :
 	//		Not enough cash
 	//		Quote invalid
