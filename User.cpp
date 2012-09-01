@@ -1,5 +1,9 @@
+#include <fstream>
 
 #include "User.h"
+
+using namespace std;
+
 
 // Singleton Utilities
 User * User::mInstance = NULL;
@@ -10,6 +14,104 @@ User * User::getInstance() {
 
 	return mInstance;
 }
+
+// Serialization Utilities
+bool User::serializePortfolio() {
+	int n = portfolio.size();
+
+	// We want to overwrite the file if it exists too
+	ofstream out("save_p.cab", ios::binary);
+	
+	if(!out)
+		return false;
+	
+	out << n;
+
+	for(vector<Quote>::iterator i = portfolio.begin(); i != portfolio.end(); ++i) {
+		Quote::QuoteSerialized obj = i->serialize();
+		out.write((char *)&obj, sizeof(obj));
+	}
+
+	out.close();
+	return true;
+}
+
+User::UserSerialized User::serializeUser() {
+	UserSerialized obj;
+	
+	obj.cashInHand = cashInHand;
+	obj.stockWorth = stockWorth;
+	obj.totalWorth = totalWorth;
+	strcpy(obj.name, name.c_str());
+
+	return obj;
+}
+
+bool User::serialize() {
+	ofstream out("save_u.cab", ios::binary);
+
+	// File failed to open
+	if(!out)
+		return false;
+
+	// Portfolio failed to serialize
+	if(!serializePortfolio())
+		return false;
+
+	UserSerialized obj = serializeUser();
+	
+	out.write((char *)&obj, sizeof(obj));
+	out.close();
+
+	return true;
+}
+
+
+bool User::deserialize() {
+	ifstream in("save_u.cab", ios::binary);
+
+	// File does not exist, first time user
+	if(!in)
+		return false;
+
+	UserSerialized obj;
+	in.read((char *)&obj, sizeof(obj));
+	deserializeUser(obj);
+
+	in.close();
+	deserializePortfolio();
+
+	return true;
+}
+
+bool User::deserializePortfolio() {
+	ifstream in("save_p.cab", ios::binary);
+
+	if(!in)
+		return false;
+
+	int n;
+	in >> n;
+	portfolio.reserve(n);
+
+	for(int i = 0; i < n; i++) {
+		Quote::QuoteSerialized obj;
+		in.read((char *)&obj, sizeof(obj));
+
+		Quote q(obj);
+		portfolio.push_back(obj);
+	}
+
+	return true;
+}
+
+void User::deserializeUser(User::UserSerialized obj) {
+	cashInHand = obj.cashInHand;
+	totalWorth = obj.totalWorth;
+	stockWorth = obj.stockWorth;
+	name = obj.name;
+}
+
 
 // DEBUG CODE
 User::User() {

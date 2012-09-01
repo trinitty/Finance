@@ -13,19 +13,37 @@ using std::vector;
  * Keeps track of all the details of the current User
  */
 class User {
+	
+	// Serializable User class struct
+	struct UserSerialized {
+		double cashInHand, stockWorth, totalWorth;
+		char name[250];
+	};
+
 	// Singleton methods
 	static User *mInstance;				// The instance of the user object to be used
 	User();								// Private constructor, singleton class
 
 	vector<Quote> portfolio;			// Keeps Track of all the Quotes the user owns
-	double cInHand;						// Cash the user has in hand
 
 	string name;
 	double stockWorth, totalWorth, cashInHand;
 
+	// Serialization/Deserialization functions
+	bool serializePortfolio();
+	bool deserializePortfolio();
+
+	UserSerialized serializeUser();
+	void deserializeUser(UserSerialized);
+
 public:
 	
 	static User * getInstance();
+
+	// Deserializing/Serializing the User class
+	bool deserialize();
+	bool serialize();
+
 
 	// IMPORTANT : All Error checking should be done before calling sell() or buy(). 
 

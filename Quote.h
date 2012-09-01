@@ -18,6 +18,12 @@ public:
 		CONNECTIVITY_ERROR
 	};
 
+	struct QuoteSerialized {
+		char symbol[25], name[50], date[25], time[25];
+		double change, price;
+		int number;
+	};
+
 private:
 	Quote();									// Cannot be instantiated without parameters
 
@@ -57,6 +63,10 @@ public:
 	bool isInit();								// Is the Quote object's data members populated properly
 	errorCode getError();						// Returns the enum constant of the error
 	string errorToString();						// Returns the latest error as a string
+	
+	// Class Serialization
+	QuoteSerialized serialize();				// Returns a serialized struct of the class which can be saved to a file
+	Quote(QuoteSerialized);						// Builds a quote object from the serialized struct
 
 	// Getters
 	string getSymbol();

@@ -167,6 +167,35 @@ string Quote::errorToString() {
 	}
 }
 
+
+// Serialization/Deserialization
+Quote::QuoteSerialized Quote::serialize() {
+	QuoteSerialized obj;
+
+	strcpy(obj.name, name.c_str());
+	strcpy(obj.date, odate.c_str());
+	strcpy(obj.symbol, symbol.c_str());
+	strcpy(obj.time, otime.c_str());
+	obj.change = ochange;
+	obj.number = number;
+	obj.price = oprice;
+	
+	return obj;
+}
+
+Quote::Quote(Quote::QuoteSerialized obj) {
+	name = obj.name;
+	odate = obj.date;
+	symbol = obj.symbol;
+	otime = obj.time;
+	ochange = obj.change;
+	number = obj.number;
+	oprice = obj.price;
+
+	init = true;
+}
+
+
 bool   Quote::isInit()				{ return init;}
 Quote::errorCode Quote::getError()	{ return error;	}
 

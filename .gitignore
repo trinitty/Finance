@@ -9,6 +9,7 @@
 
 *.dev
 *.win
+*.cab
 
 # Visual Studio files #
 *.vcxproj

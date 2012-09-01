@@ -44,6 +44,8 @@ public:
 	 */
 	string download(const char *);
 
+	bool isConnected();						// Check if we have a working internet connection
+
 	~DownloadHandler();						// Cleans up curl
 };
 

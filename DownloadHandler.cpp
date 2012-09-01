@@ -80,6 +80,15 @@ string DownloadHandler::getError() {
 	return "WRNOG CALL TO GETERROR";
 }
 
+// Check for internet connectivity
+bool DownloadHandler::isConnected() {
+	curl_easy_setopt(curl, CURLOPT_URL, "http://www.google.com/");
+
+	result = curl_easy_perform(curl);
+	
+	return success();
+}
+
 // Destructor
 DownloadHandler::~DownloadHandler() {
 	curl_easy_cleanup(curl);
