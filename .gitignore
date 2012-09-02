@@ -9,6 +9,7 @@
 
 *.dev
 *.win
+*.cab
 
 # Visual Studio files #
 *.vcxproj
@@ -16,6 +17,7 @@
 *.user
 *.sdf
 *.opensdf
+*.suo
 
 ipch/
 Debug/

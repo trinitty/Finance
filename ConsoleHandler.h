@@ -17,7 +17,7 @@ public:
 		STATUS,                              //changed from history to status
 		EXIT
 	};
- //git test
+
 private:
 	bool connected;					// Keeps track of wheather we have an active internet connection
 
@@ -48,23 +48,3 @@ public:
  * User class's functions like buy or sell will not verify the input for number of stocks. So pass in verfied input only.
 
  */
-
-buyMenu() {
-          char choice[];
-          Quote q = Quote::get(choice);
-          cout << q.getName()
-          
-          
-          }
-          
-          
-          
-sellMenu()
-
-Qoute q = user->getQuote("AAPL");
-
-ConsoleHandler() {
-                 
- user = User::getInstance();
-                  
-}
