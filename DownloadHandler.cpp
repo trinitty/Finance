@@ -1,6 +1,3 @@
-#include <curl/curl.h>
-#include <string>
-
 #include "DownloadHandler.h"
 
 using std::string;
@@ -51,6 +48,9 @@ DownloadHandler * DownloadHandler::getDownloadHandler() {
 }
 
 string DownloadHandler::download(const char *param) {
+	// Must clear buffer everytime to avoid errors
+	oBuffer = "";
+
 	char URL[150];
 	sprintf_s(URL, baseURL.c_str(), param);
 	curl_easy_setopt(curl, CURLOPT_URL, URL);
@@ -78,6 +78,15 @@ string DownloadHandler::getError() {
 
 	// Should not happen
 	return "WRNOG CALL TO GETERROR";
+}
+
+// Check for internet connectivity
+bool DownloadHandler::isConnected() {
+	curl_easy_setopt(curl, CURLOPT_URL, "http://www.google.com/");
+
+	result = curl_easy_perform(curl);
+	
+	return success();
 }
 
 // Destructor
